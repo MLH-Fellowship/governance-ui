@@ -1,11 +1,19 @@
 import useQueryContext from '@hooks/useQueryContext'
 import { RealmInfo } from '@models/registry/api'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Loading from '@components/Loading'
 import useWalletStore from 'stores/useWalletStore'
 import Button from '@components/Button'
 import { notify } from '@utils/notifications'
+
+//token price
+import useGovernanceAssets from '@hooks/useGovernanceAssets'
+import HoldTokensTotalPrice from '@components/TreasuryAccount/HoldTokensTotalPrice'
+import { getMintDecimalAmountFromNatural } from '@tools/sdk/units'
+import tokenService from '@utils/services/token'
+import BigNumber from 'bignumber.js'
+import { BN } from '@project-serum/anchor'
 
 export default function RealmsDashboard({
   realms,
@@ -46,6 +54,33 @@ export default function RealmsDashboard({
     router.push(fmtUrlWithCluster(`/realms/new`))
   }
 
+  ///////////////////////////////////////////////////////////////////
+  //Display info on console.log
+
+  const { governedTokenAccountsWithoutNfts } = useGovernanceAssets()
+  //Function from HoldTokensTotalPrice
+  //need to figure out how to reference the search for total price
+  //Got it to display ID on hover, not sure if we can use that for info
+  function calcTotalTokensPrice(e) {
+    console.log(e._targetInst.key)
+    const totalPrice = governedTokenAccountsWithoutNfts
+      .filter(
+        (x) => typeof x.mint !== 'undefined' && typeof x.token !== 'undefined'
+      )
+      .map((x) => {
+        return (
+          getMintDecimalAmountFromNatural(
+            x.mint!.account,
+            new BN(x.token!.account.amount)
+          ).toNumber() *
+          tokenService.getUSDTokenPrice(x.token!.account.mint.toBase58())
+        )
+      })
+      .reduce((acc, val) => acc + val, 0)
+
+    return console.log(totalPrice ? new BigNumber(totalPrice).toFormat(0) : '')
+  }
+
   return (
     <div>
       {/* Re-instate when there are enough REALMs for this to be useful. Maybe > 25 */}
@@ -80,6 +115,7 @@ export default function RealmsDashboard({
           <>
             {realms?.map((realm: RealmInfo) => (
               <div
+                onMouseEnter={(e) => calcTotalTokensPrice(e)}
                 onClick={() => goToRealm(realm)}
                 className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
                 key={realm.realmId.toString()}

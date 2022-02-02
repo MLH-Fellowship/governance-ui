@@ -28,6 +28,7 @@ const HoldTokensTotalPrice = () => {
       setTotalPriceFormatted(
         totalPrice ? new BigNumber(totalPrice).toFormat(0) : ''
       )
+      console.log(totalPrice, governedTokenAccountsWithoutNfts)
     }
     if (governedTokenAccountsWithoutNfts.length) {
       calcTotalTokensPrice()
