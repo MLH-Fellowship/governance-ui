@@ -9,11 +9,12 @@ import { notify } from '@utils/notifications'
 
 ///////////////////////////Masaya Added////////////////////////////////
 //token price
-import useGovernanceAssets from '@hooks/useGovernanceAssets'
-import { getMintDecimalAmountFromNatural } from '@tools/sdk/units'
-import tokenService from '@utils/services/token'
-import BigNumber from 'bignumber.js'
-import { BN } from '@project-serum/anchor'
+// import useGovernanceAssets from '@hooks/useGovernanceAssets'
+// import { getMintDecimalAmountFromNatural } from '@tools/sdk/units'
+// import tokenService from '@utils/services/token'
+// import BigNumber from 'bignumber.js'
+// import { BN } from '@project-serum/anchor'
+
 //# of members
 import useMembers from '@components/Members/useMembers'
 
@@ -59,7 +60,6 @@ export default function RealmsDashboard({
   /////////////////////////////////////////////////////////////////////
 
   //Variables
-  const { governedTokenAccountsWithoutNfts } = useGovernanceAssets()
   const { activeMembers } = useMembers()
 
   //need to figure out how to reference the search for total price
@@ -71,24 +71,26 @@ export default function RealmsDashboard({
   }
 
   //Function from HoldTokensTotalPrice to calculate into USD price
-  function calcTotalTokensPrice(e) {
-    const totalPrice = governedTokenAccountsWithoutNfts
-      .filter(
-        (x) => typeof x.mint !== 'undefined' && typeof x.token !== 'undefined'
-      )
-      .map((x) => {
-        return (
-          getMintDecimalAmountFromNatural(
-            x.mint!.account,
-            new BN(x.token!.account.amount)
-          ).toNumber() *
-          tokenService.getUSDTokenPrice(x.token!.account.mint.toBase58())
-        )
-      })
-      .reduce((acc, val) => acc + val, 0)
 
-    return console.log(totalPrice ? new BigNumber(totalPrice).toFormat(0) : '')
-  }
+  // const { governedTokenAccountsWithoutNfts } = useGovernanceAssets()
+  // function calcTotalTokensPrice(e) {
+  //   const totalPrice = governedTokenAccountsWithoutNfts
+  //     .filter(
+  //       (x) => typeof x.mint !== 'undefined' && typeof x.token !== 'undefined'
+  //     )
+  //     .map((x) => {
+  //       return (
+  //         getMintDecimalAmountFromNatural(
+  //           x.mint!.account,
+  //           new BN(x.token!.account.amount)
+  //         ).toNumber() *
+  //         tokenService.getUSDTokenPrice(x.token!.account.mint.toBase58())
+  //       )
+  //     })
+  //     .reduce((acc, val) => acc + val, 0)
+
+  //   return console.log(totalPrice ? new BigNumber(totalPrice).toFormat(0) : '')
+  // }
 
   /////////////////////////////////////////////////////////////////////////////
   return (
