@@ -6,6 +6,7 @@ import Loading from '@components/Loading'
 import useWalletStore from 'stores/useWalletStore'
 import Button from '@components/Button'
 import { notify } from '@utils/notifications'
+import TwitterIcon from '@components/TwitterIcon'
 
 import ReactCardFlip from 'react-card-flip'
 
@@ -224,9 +225,40 @@ export default function RealmsDashboard({
                   key={realm.realmId.toString()}
                   onClick={() => goToRealm(realm)}
                 >
-                  <p>Balence: {rNG.balance}</p>
-                  <p>Members: {rNG.members}</p>
-                  <p>Proposals: {rNG.proposals}</p>
+                  <div className="flex flex-row pb-3">
+                    <div className="flex">
+                      {rNG.logo ? (
+                        <img
+                          className="w-8 flex-none mr-1.5"
+                          src={rNG.logo}
+                        ></img>
+                      ) : (
+                        <span className="bg-[rgba(255,255,255,0.06)] h-8 w-8 mr-1.5 flex font-bold items-center justify-center rounded-full text-fgd-3">
+                          {rNG.symbol.charAt(0)}
+                        </span>
+                      )}
+
+                      <p>{rNG.symbol}</p>
+                    </div>
+                    <div className="flex pl-8">
+                      <p className="pl-2 no-underline hover:underline">
+                        <a href={rNG.website}>Website</a>
+                      </p>
+                      <a href={rNG.twitter}>
+                        <TwitterIcon className={'w-6 ml-2'}></TwitterIcon>
+                      </a>
+                    </div>
+                  </div>
+
+                  <p>
+                    <strong>Balance:</strong> {rNG.balance}
+                  </p>
+                  <p>
+                    <strong>Members:</strong> {rNG.members}
+                  </p>
+                  <p>
+                    <strong>Proposals:</strong> {rNG.proposals}
+                  </p>
                 </div>
               </ReactCardFlip>
             ))}
