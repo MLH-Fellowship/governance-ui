@@ -7,6 +7,8 @@ import useWalletStore from 'stores/useWalletStore'
 import Button from '@components/Button'
 import { notify } from '@utils/notifications'
 
+import ReactCardFlip from 'react-card-flip'
+
 //Types for RNG state
 type RNGtypes = {
   key: string
@@ -31,6 +33,8 @@ export default function RealmsDashboard({
   showNewButton?: boolean
   header?: string
 }) {
+  //boolean state for flipping a card...
+  const [isFlipped, setIsFlipped] = useState(false)
   const router = useRouter()
   const { fmtUrlWithCluster } = useQueryContext()
   const { connected, current: wallet } = useWalletStore((s) => s)
@@ -53,6 +57,7 @@ export default function RealmsDashboard({
 
   //onMouseEnter, get key of organisation and fill out state
   const getOrganisation = (e: any) => {
+    setIsFlipped(!isFlipped)
     settingState(e)
   }
 
@@ -186,27 +191,40 @@ export default function RealmsDashboard({
         ) : (
           <>
             {realms?.map((realm: RealmInfo) => (
-              <div
-                onClick={() => goToRealm(realm)}
-                className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
-                key={realm.realmId.toString()}
-                onMouseEnter={(e) => getOrganisation(e)}
-              >
-                <div className="pb-5">
-                  {realm.ogImage ? (
-                    <div className="bg-[rgba(255,255,255,0.06)] rounded-full h-16 w-16 flex items-center justify-center">
-                      <img className="w-10" src={realm.ogImage}></img>
-                    </div>
-                  ) : (
-                    <div className="bg-[rgba(255,255,255,0.06)] h-16 w-16 flex font-bold items-center justify-center rounded-full text-fgd-3">
-                      {realm.displayName?.charAt(0)}
-                    </div>
-                  )}
+              <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+                <div
+                  onClick={() => goToRealm(realm)}
+                  className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
+                  key={realm.realmId.toString()}
+                  onMouseEnter={(e) => getOrganisation(e)}
+                >
+                  <div className="pb-5">
+                    {realm.ogImage ? (
+                      <div className="bg-[rgba(255,255,255,0.06)] rounded-full h-16 w-16 flex items-center justify-center">
+                        <img className="w-10" src={realm.ogImage}></img>
+                      </div>
+                    ) : (
+                      <div className="bg-[rgba(255,255,255,0.06)] h-16 w-16 flex font-bold items-center justify-center rounded-full text-fgd-3">
+                        {realm.displayName?.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-center break-all">
+                    {realm.displayName ?? realm.symbol}
+                  </h3>
                 </div>
-                <h3 className="text-center break-all">
-                  {realm.displayName ?? realm.symbol}
-                </h3>
-              </div>
+
+                <div
+                  className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
+                  onMouseLeave={(e) => getOrganisation(e)}
+                  key={realm.realmId.toString()}
+                  onClick={() => goToRealm(realm)}
+                >
+                  <p>Balence: {rNG.balance}</p>
+                  <p>Members: {rNG.members}</p>
+                  <p>Proposals: {rNG.proposals}</p>
+                </div>
+              </ReactCardFlip>
             ))}
           </>
         )}
