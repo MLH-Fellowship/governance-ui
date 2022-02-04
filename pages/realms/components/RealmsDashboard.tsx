@@ -244,7 +244,7 @@ export default function RealmsDashboard({
                       <p className="pl-2 no-underline hover:underline">
                         <a href={rNG.website}>Website</a>
                       </p>
-                      <a href={rNG.twitter}>
+                      <a href={`http://twitter.com/${rNG.twitter}`}>
                         <TwitterIcon className={'w-6 ml-2'}></TwitterIcon>
                       </a>
                     </div>
