@@ -197,6 +197,7 @@ export default function RealmsDashboard({
                 flipDirection="horizontal"
                 key={realm.realmId.toString()}
               >
+                {/* card front side */}
                 <div
                   onClick={() => goToRealm(realm)}
                   className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
@@ -218,7 +219,6 @@ export default function RealmsDashboard({
                     {realm.displayName ?? realm.symbol}
                   </h3>
                 </div>
-
                 <div
                   className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
                   onMouseLeave={(e) => getOrganisation(e)}
@@ -226,10 +226,13 @@ export default function RealmsDashboard({
                   onClick={() => goToRealm(realm)}
                 >
                   <div className="flex flex-row pb-3">
-                    <div className="flex">
+                    <div
+                      className="flex
+                    flex-wrap"
+                    >
                       {rNG.logo ? (
                         <img
-                          className="w-8 flex-none mr-1.5"
+                          className="w-6 flex-none mr-1.5"
                           src={rNG.logo}
                         ></img>
                       ) : (
