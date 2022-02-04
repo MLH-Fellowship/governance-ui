@@ -217,7 +217,6 @@ export default function RealmsDashboard({
                 <div
                   className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
                   onMouseLeave={(e) => getOrganisation(e)}
-                  key={realm.realmId.toString()}
                   onClick={() => goToRealm(realm)}
                 >
                   <p>Balence: {rNG.balance}</p>
