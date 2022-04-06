@@ -50,6 +50,16 @@ const ConnectWalletButton = (props) => {
     setUseDevnet(connection.cluster === 'devnet')
   }, [connection.cluster])
 
+  //Reconnects wallet on refresh or change to devnet
+  useEffect(() => {
+    {
+      ;(async () => {
+        console.log('CONNECTED WALLET')
+        await current?.connect()
+      })()
+    }
+  }, [current])
+
   const handleConnectDisconnect = async () => {
     try {
       if (connected) {
