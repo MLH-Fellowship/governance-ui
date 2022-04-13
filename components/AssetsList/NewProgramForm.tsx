@@ -4,7 +4,7 @@ import PreviousRouteBtn from 'components/PreviousRouteBtn'
 import Tooltip from 'components/Tooltip'
 import useQueryContext from 'hooks/useQueryContext'
 import useRealm from 'hooks/useRealm'
-import { RpcContext } from '@solana/spl-governance'
+import { RpcContext, VoteTipping } from '@solana/spl-governance'
 import { PublicKey } from '@solana/web3.js'
 import { tryParseKey } from 'tools/validators/pubkey'
 import { isFormValid } from 'utils/formValidation'
@@ -40,6 +40,7 @@ const defaultFormValues = {
   maxVotingTime: 3,
   voteThreshold: 60,
   transferAuthority: true,
+  voteTipping: VoteTipping.Strict,
 }
 const NewProgramForm = () => {
   const router = useRouter()
@@ -63,11 +64,12 @@ const NewProgramForm = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [formErrors, setFormErrors] = useState({})
-  const tokenOwnerRecord = ownVoterWeight.canCreateGovernanceUsingCouncilTokens()
-    ? ownVoterWeight.councilTokenRecord
-    : realm && ownVoterWeight.canCreateGovernanceUsingCommunityTokens(realm)
-    ? ownVoterWeight.communityTokenRecord
-    : undefined
+  const tokenOwnerRecord =
+    ownVoterWeight.canCreateGovernanceUsingCouncilTokens()
+      ? ownVoterWeight.councilTokenRecord
+      : realm && ownVoterWeight.canCreateGovernanceUsingCommunityTokens(realm)
+      ? ownVoterWeight.communityTokenRecord
+      : undefined
 
   const handleSetForm = ({ propertyName, value }) => {
     setFormErrors({})
@@ -103,6 +105,7 @@ const NewProgramForm = () => {
           maxVotingTime: form.maxVotingTime,
           voteThresholdPercentage: form.voteThreshold,
           mintDecimals: realmMint.decimals,
+          voteTipping: form.voteTipping,
         }
         const governanceConfig = getGovernanceConfig(governanceConfigValues)
         await registerProgramGovernance(

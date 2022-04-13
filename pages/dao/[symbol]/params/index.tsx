@@ -38,18 +38,14 @@ const Params = () => {
     (x) =>
       x.governance.pubkey.toBase58() === realm?.account.authority?.toBase58()
   )
-  const [isRealmProposalModalOpen, setIsRealmProposalModalOpen] = useState(
-    false
-  )
-  const [
-    isGovernanceProposalModalOpen,
-    setIsGovernanceProposalModalOpen,
-  ] = useState(false)
+  const [isRealmProposalModalOpen, setIsRealmProposalModalOpen] =
+    useState(false)
+  const [isGovernanceProposalModalOpen, setIsGovernanceProposalModalOpen] =
+    useState(false)
   const [activeGovernance, setActiveGovernance] = useState<any>(null)
   const [activeTab, setActiveTab] = useState('Params')
-  const [isRealmAuthorityModalOpen, setRealmAuthorityModalIsOpen] = useState(
-    false
-  )
+  const [isRealmAuthorityModalOpen, setRealmAuthorityModalIsOpen] =
+    useState(false)
   const realmAccount = realm?.account
   const communityMint = realmAccount?.communityMint.toBase58()
   const councilMintPk = realmAccount?.config.councilMint?.toBase58()
@@ -400,7 +396,7 @@ const Params = () => {
                                       />
                                     )}
                                     <span>{`${info.amountFormatted} ${
-                                      info.info?.symbol && info.info?.symbol
+                                      info.info?.symbol || ''
                                     }`}</span>
                                   </div>
                                 }
@@ -528,7 +524,7 @@ const Params = () => {
 }
 
 const DisplayField = ({ label, val, padding = false, bg = false }) => {
-  const pubkey = tryParsePublicKey(val)
+  const pubkey = isNaN(val) && tryParsePublicKey(val)
   const name = pubkey ? getAccountName(pubkey) : ''
   return (
     <div

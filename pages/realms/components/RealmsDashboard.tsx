@@ -24,13 +24,15 @@ export default function RealmsDashboard({
     router.push(url)
   }
 
-  const certifiedRealms = useMemo(() => realms?.filter((r) => r.isCertified), [
-    realms,
-  ])
+  const certifiedRealms = useMemo(
+    () => realms?.filter((r) => r.isCertified),
+    [realms]
+  )
 
-  const unchartedRealms = useMemo(() => realms?.filter((r) => !r.isCertified), [
-    realms,
-  ])
+  const unchartedRealms = useMemo(
+    () => realms?.filter((r) => !r.isCertified),
+    [realms]
+  )
 
   return isLoading ? (
     <div className="grid grid-flow-row grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -52,7 +54,7 @@ export default function RealmsDashboard({
           certifiedRealms.map((realm: RealmInfo) => (
             <div
               onClick={() => goToRealm(realm)}
-              className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
+              className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center justify-center p-8 rounded-lg hover:bg-bkg-3"
               key={realm.realmId.toString()}
             >
               <div className="pb-5">
@@ -96,7 +98,7 @@ export default function RealmsDashboard({
             unchartedRealms.map((realm: RealmInfo) => (
               <div
                 onClick={() => goToRealm(realm)}
-                className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center p-8 rounded-lg hover:bg-bkg-3"
+                className="bg-bkg-2 cursor-pointer default-transition flex flex-col items-center justify-center p-8 rounded-lg hover:bg-bkg-3"
                 key={realm.realmId.toString()}
               >
                 <div className="pb-5">
